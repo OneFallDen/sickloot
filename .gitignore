@@ -1,6 +1,6 @@
 /env
 **/__pycache__
 /.idea
-/build/lib
+/build
 /dist
 /sickloot.egg-info
