@@ -9,7 +9,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = "user_entity"
+    __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, index=True)
     password = Column(String(255), nullable=False)
@@ -18,6 +18,34 @@ class User(Base):
     steam_acc_url = Column(String(255))
     role = Column(Integer, nullable=False)
     balance = Column(Integer, nullable=False)
+
+
+class Item(Base):
+    __tablename__ = "item"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    character = Column(String(255), nullable=False)
+    rarity = Column(String(255), nullable=False)
+    type = Column(String(255), nullable=False)
+    price = Column(Integer, nullable=False)
+
+
+class Case(Base):
+    __tablename__ = "case"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    price = Column(Integer, nullable=False)
+
+
+class Sett(Base):
+    __tablename__ = "case"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    character = Column(String(255), nullable=False)
+    price = Column(Integer, nullable=False)
 
 
 def create_db_and_tables():
