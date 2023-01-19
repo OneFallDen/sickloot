@@ -20,7 +20,7 @@ class User(Base):
     role = Column(Integer, nullable=False)
     balance = Column(Integer, nullable=False)
 
-    windrows = relationship('Windrow_History', backref='user')
+    windrow_history = relationship('Windrow_History', backref='user')
     inventory = relationship('Inventory', backref='user')
     drop_user = relationship('DropHistory', backref='user')
 
@@ -64,6 +64,7 @@ class Sett(Base):
 class Windrow_History(Base):
     __tablename__ = 'windrow_history'
 
+    id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     win_rep = Column(Integer, nullable=False)
     date = Column(DateTime,  default=datetime.utcnow())
@@ -72,6 +73,7 @@ class Windrow_History(Base):
 class Inventory(Base):
     __tablename__ = 'inventory'
 
+    id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     item_id = Column(Integer, ForeignKey('item.id'))
 
@@ -79,6 +81,7 @@ class Inventory(Base):
 class CaseItems(Base):
     __tablename__ = 'case_items'
 
+    id = Column(Integer, primary_key=True, index=True)
     case_id = Column(Integer, ForeignKey('case.id'))
     item_id = Column(Integer, ForeignKey('item.id'))
 
@@ -86,6 +89,7 @@ class CaseItems(Base):
 class SetItems(Base):
     __tablename__ = 'set_items'
 
+    id = Column(Integer, primary_key=True, index=True)
     set_id = Column(Integer, ForeignKey('set.id'))
     item_id = Column(Integer, ForeignKey('item.id'))
 
@@ -93,6 +97,7 @@ class SetItems(Base):
 class DropHistory(Base):
     __tablename__ = 'drop_history'
 
+    id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     case_id = Column(Integer, ForeignKey('case.id'))
     item_id = Column(Integer, ForeignKey('item.id'))
