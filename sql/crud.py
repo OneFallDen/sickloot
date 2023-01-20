@@ -6,11 +6,11 @@ from models import schemas
 
 
 def check_user(email: str, login: str, db: Session):
-    resault = db.execute(select(models.User).where(models.User.email == email)).first()
-    if resault:
+    result = db.execute(select(models.User).where(models.User.email == email)).first()
+    if result:
         return 'User with that email already exists'
-    resault = db.execute(select(models.User).where(models.User.login == login)).first()
-    if resault:
+    result = db.execute(select(models.User).where(models.User.login == login)).first()
+    if result:
         return 'User with that username already exists'
     return ''
 
@@ -33,5 +33,10 @@ def add_user(user: schemas.UserReg, db: Session, hashed_password: str):
 
 
 def get_user_id(login: str, db: Session):
-    resault = db.execute(select(models.User).where(models.User.login == login)).first()
-    return resault[0].id
+    result = db.execute(select(models.User).where(models.User.login == login)).first()
+    return result[0].id
+
+
+def get_encoded_password(user_id: int, db: Session):
+    result = db.execute(select(models.User).where(models.User.id == user_id)).first()
+    return result[0].password
