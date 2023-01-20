@@ -3,6 +3,15 @@ from pydantic import BaseModel, EmailStr
 from enum import Enum
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    user_id: int | None = None
+
+
 class User(BaseModel):
     id: int
     login: str
@@ -13,6 +22,20 @@ class User(BaseModel):
     steam_acc_url: str
     role: int
     balance: int
+
+
+class UserAuth(BaseModel):
+    login: str
+    password: str
+
+
+class UserReg(UserAuth):
+    email: EmailStr
+    repeat_password: str
+
+
+class UserInDB(User):
+    hashed_password: str
 
 
 class windrow_history(BaseModel):
