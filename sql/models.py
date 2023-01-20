@@ -13,7 +13,9 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True, index=True)
+    login = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)
+    email = Column(String(255), nullable=False)
     opened_cases = Column(Integer, nullable=False)
     level = Column(Integer, nullable=False)
     steam_acc_url = Column(String(255))
