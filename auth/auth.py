@@ -8,12 +8,12 @@ from config import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, PASSWORD_
 hasher = CryptContext(schemes=['bcrypt'])
 
 
-def encode_token(user_id):
+def encode_token(username):
     payload = {
         'exp': datetime.utcnow() + timedelta(days=0, minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
         'iat': datetime.utcnow(),
         'scope': 'access_token',
-        'sub': user_id
+        'sub': username
     }
     return jwt.encode(
         payload,
@@ -22,10 +22,10 @@ def encode_token(user_id):
     )
 
 
-def decode_token(token):
+def decode_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
-        if payload['scope'] == 'accsess_token':
+        if payload['scope'] == 'access_token':
             return payload['sub']
         raise HTTPException(status_code=401, detail='Scope for the token is invalid')
     except jwt.ExpiredSignatureError:
