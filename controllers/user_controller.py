@@ -1,12 +1,15 @@
-from fastapi.security import HTTPBearer
-from fastapi import HTTPException
+from fastapi.security import HTTPBearer, OAuth2PasswordBearer
+from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
+from jose import jwt
 
 from models.schemas import UserReg, UserAuth
-from auth.auth import encode_password, encode_token, encode_refresh_token, verify_password
-from sql.crud import check_user, add_user, get_user_id, get_encoded_password
+from auth.auth import encode_password, encode_token, encode_refresh_token, verify_password, decode_token
+from sql.crud import check_user, add_user, get_user_id, get_encoded_password, get_user
+from sql.db import get_db
 
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 security = HTTPBearer()
 
 
@@ -59,3 +62,11 @@ def signin(user: UserAuth, db: Session):
         'access_token': access_token,
         'refresh_token': refresh_token
     }
+
+
+async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    user_id = decode_token(token)
+    user = get_user(user_id, db)
+    if user is None:
+        raise HTTPException(status_code=401, detail='Could not validate credentials')
+    return user
