@@ -25,7 +25,7 @@ class User(BaseModel):
 
 
 class UserAuth(BaseModel):
-    login: str
+    username: str
     password: str
 
 
