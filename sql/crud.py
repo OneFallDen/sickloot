@@ -69,3 +69,23 @@ def update_balance(delta_balance: int, user_id: int, db: Session):
     )
     db.commit()
     return True
+
+
+"""
+    CASE
+"""
+
+
+def get_case_by_id(case_id: int, db: Session):
+    result = db.execute(select(models.Case).where(models.Case.id == case_id)).first()
+    return result[0]
+
+
+def get_case_items(case_id: int, db: Session):
+    result = db.execute(select(models.CaseItems).where(models.CaseItems.case_id == case_id))
+    items = []
+    items_res = result.scalars().all()
+    for res in items_res:
+        res_items = db.execute(select(models.Item).where(models.Item.id == res.item_id)).first()
+        items.append(res_items[0])
+    return items
