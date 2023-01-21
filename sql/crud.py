@@ -5,6 +5,11 @@ from sql import models
 from models import schemas
 
 
+"""
+    USER
+"""
+
+
 def check_user(email: str, login: str, db: Session):
     result = db.execute(select(models.User).where(models.User.email == email)).first()
     if result:
@@ -40,3 +45,8 @@ def get_user_id(login: str, db: Session):
 def get_encoded_password(user_id: int, db: Session):
     result = db.execute(select(models.User).where(models.User.id == user_id)).first()
     return result[0].password
+
+
+def get_user(user_id: int, db: Session):
+    result = db.execute(select(models.User).where(models.User.id == user_id)).first()
+    return result[0]
