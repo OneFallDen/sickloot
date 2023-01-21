@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from sql import models
 from models import schemas
 
-
 """
     USER
 """
@@ -22,7 +21,7 @@ def check_user(email: str, login: str, db: Session):
 
 def add_user(user: schemas.UserReg, db: Session, hashed_password: str):
     db_user = models.User(
-        login=user.login,
+        login=user.username,
         password=hashed_password,
         email=user.email,
         opened_cases=0,
@@ -50,3 +49,20 @@ def get_encoded_password(user_id: int, db: Session):
 def get_user(user_id: int, db: Session):
     result = db.execute(select(models.User).where(models.User.id == user_id)).first()
     return result[0]
+
+
+"""
+    BALANCE
+"""
+
+
+def update_balance(delta_balance: int, user_id: int, db: Session):
+    result = db.execute(select(models.User).where(models.User.id == user_id)).first()
+    balance = result[0].balance
+    new_balance = balance + delta_balance
+    db.query(models.User).filter(models.User.id == user_id).update(
+        {
+            models.User.balance: new_balance
+        }
+    )
+    db.commit()
