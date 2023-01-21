@@ -4,3 +4,4 @@
 /build
 /dist
 /sickloot.egg-info
+/sql/items_cases_sets.sql
