@@ -60,9 +60,12 @@ def update_balance(delta_balance: int, user_id: int, db: Session):
     result = db.execute(select(models.User).where(models.User.id == user_id)).first()
     balance = result[0].balance
     new_balance = balance + delta_balance
+    if new_balance < 0:
+        return False
     db.query(models.User).filter(models.User.id == user_id).update(
         {
             models.User.balance: new_balance
         }
     )
     db.commit()
+    return True
