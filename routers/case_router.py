@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from sql.db import get_db
 from models.schemas import User
-from controllers.case_controller import get_case, get_case_with_items
+from controllers.case_controller import get_case, get_case_with_items, opened_case
 from controllers.user_controller import get_current_user
 
 
@@ -22,4 +22,4 @@ async def get_case_and_items_info(case_id: int, db: Session = Depends(get_db)):
 
 @router.post('/case/open', tags=['case'])
 async def open_case(case_id, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    return 1
+    return opened_case(case_id, user, db)

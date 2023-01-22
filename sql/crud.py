@@ -89,3 +89,46 @@ def get_case_items(case_id: int, db: Session):
         res_items = db.execute(select(models.Item).where(models.Item.id == res.item_id)).first()
         items.append(res_items[0])
     return items
+
+
+"""
+    INVENTORY
+"""
+
+
+def add_item_in_inv(item_id: int, user_id: int, db: Session):
+    db_inv = models.Inventory(
+        user_id=user_id,
+        item_id=item_id
+    )
+    db.add(db_inv)
+    db.commit()
+    db.refresh(db_inv)
+    return db_inv
+
+
+"""
+    DROP HISTORY
+"""
+
+
+def add_item_in_drop_history(user_id: int, case_id: int, item_id: int, db: Session):
+    db_dh = models.DropHistory(
+        user_id=user_id,
+        case_id=case_id,
+        item_id=item_id
+    )
+    db.add(db_dh)
+    db.commit()
+    db.refresh(db_dh)
+    return db_dh
+
+
+"""
+    ITEMS
+"""
+
+
+def get_item_by_id(item_id: int, db: Session):
+    result = db.execute(select(models.Item).where(models.Item.id == item_id)).first()
+    return result[0]
