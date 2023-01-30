@@ -91,6 +91,27 @@ def get_case_items(case_id: int, db: Session):
     return items
 
 
+def count_cases(user_id: int, db: Session):
+    result = db.execute(select(models.User).where(models.User.id == user_id)).first()
+    case_count = result[0].opened_cases
+    current_level = result[0].level
+    if current_level * 5 <= case_count:
+        update_level(current_level, user_id, db)
+    update_cases(case_count, user_id, db)
+    return True
+
+
+def update_cases(case_count: int, user_id: int, db: Session):
+    new_count_cases = case_count + 1
+    db.query(models.User).filter(models.User.id == user_id).update(
+        {
+            models.User.opened_cases: new_count_cases
+        }
+    )
+    db.commit()
+    return True
+
+
 """
     INVENTORY
 """
@@ -141,3 +162,19 @@ def add_item_in_drop_history(user_id: int, case_id: int, item_id: int, db: Sessi
 def get_item_by_id(item_id: int, db: Session):
     result = db.execute(select(models.Item).where(models.Item.id == item_id)).first()
     return result[0]
+
+
+"""
+    LEVEL UPDATE
+"""
+
+
+def update_level(current_level: int, user_id: int, db: Session):
+    new_level = current_level + 1
+    db.query(models.User).filter(models.User.id == user_id).update(
+        {
+            models.User.level: new_level
+        }
+    )
+    db.commit()
+    return True

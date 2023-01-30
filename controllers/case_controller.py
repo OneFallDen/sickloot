@@ -3,7 +3,7 @@ from fastapi import HTTPException
 import random as rnd
 
 from sql.crud import get_case_by_id, get_case_items, update_balance, add_item_in_inv, add_item_in_drop_history, \
-    get_item_by_id
+    get_item_by_id, count_cases
 from models.schemas import User
 
 
@@ -31,4 +31,5 @@ def opened_case(case_id: int, user: User, db: Session):
     item_id = item.id
     add_item_in_inv(item_id, user.id, db)
     add_item_in_drop_history(user.id, case_id, item_id, db)
+    count_cases(user.id, db)
     return get_item_by_id(item_num+1, db)
