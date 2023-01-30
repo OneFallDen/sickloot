@@ -107,6 +107,15 @@ def add_item_in_inv(item_id: int, user_id: int, db: Session):
     return db_inv
 
 
+def get_inventory_items(user_id: int, db: Session):
+    result = db.execute(select(models.Inventory).where(models.Inventory.user_id == user_id))
+    res = result.scalars().all()
+    items = []
+    for r in res:
+        items.append(get_item_by_id(r.item_id, db))
+    return items
+
+
 """
     DROP HISTORY
 """
