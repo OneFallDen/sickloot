@@ -137,6 +137,12 @@ def get_inventory_items(user_id: int, db: Session):
     return items
 
 
+def delete_item_from_inventory(item_id: int, user_id: int, db: Session):
+    result = db.execute(select(models.Inventory).where(models.Inventory.user_id == user_id).
+                        where(models.Inventory.item_id == item_id)).first()
+    db.query(models.Inventory).filter(models.Inventory.id == result[0].id).delete()
+
+
 """
     DROP HISTORY
 """
